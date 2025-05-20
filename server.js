@@ -10,27 +10,56 @@ var selectedRoom = "";
 var numberOfAdults = "";
 var Name = "";
 var Phoneno = "";
+var Email = "";
+var Preference = "";
+var textarea = "";
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
 app.post("/api/sendemail", (req, res) => {
-  const { name, phoneno, checkInDate, checkOutDate, room, adults } = req.body;
+  const {
+    name,
+    phoneno,
+    checkInDate,
+    checkOutDate,
+    room,
+    adults,
+    roompref,
+    email,
+    textarea,
+  } = req.body;
   Name = name;
   Phoneno = phoneno;
   checkIn = checkInDate;
   checkOut = checkOutDate;
   selectedRoom = room;
   numberOfAdults = adults;
-  console.log(Name, Phoneno, checkIn, checkOut, selectedRoom, numberOfAdults);
+  RoomPref = roompref;
+  Email = email;
+  Textarea = textarea;
+  console.log(
+    Name,
+    Phoneno,
+    checkIn,
+    checkOut,
+    selectedRoom,
+    numberOfAdults,
+    RoomPref,
+    Email,
+    Textarea
+  );
   sendEmail(
     Name,
     Phoneno,
     checkIn,
     checkOut,
     selectedRoom,
-    numberOfAdults
+    numberOfAdults,
+    RoomPref,
+    Email,
+    Textarea
   ).catch(console.error);
   res.json({ message: "Email sent successfully!" });
 });
@@ -47,7 +76,10 @@ async function sendEmail(
   checkIn,
   checkOut,
   selectedRoom,
-  numberOfAdults
+  numberOfAdults,
+  RoomPref,
+  Email,
+  Textarea
 ) {
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -62,12 +94,15 @@ async function sendEmail(
     to: "praneshsenthilkumar18@gmail.com",
     subject: "Room Enquiry",
     html: `<div>
-        <p>Name: ${Name}</p>
+    <p>Name: ${Name}</p>
+    <p>Email: ${Email}</p>
     <p>Phone number: ${Phoneno}</p>
     <p>Check In Date: ${checkIn}</p>
     <p>Check Out Date: ${checkOut}</p>
+    <p>Room Preference: ${RoomPref}</p>
     <p>Room: ${selectedRoom}</p>
     <p>Adults: ${numberOfAdults}</p>
+    <p>Suggestions: ${Textarea}</p>
   </div>`,
   });
 
